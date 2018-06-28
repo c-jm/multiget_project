@@ -1,0 +1,20 @@
+<?php
+
+class MultiGetChunk
+{
+    public $start; // The starting chunk of this segment.
+    public $end;  // The ending chunk of the segment.
+
+    public function __construct($start, $end)
+    {
+        $this->start = $start;
+        $this->end = $end;
+    }
+
+    public function __toString()
+    {
+        return sprintf("bytes=%d-%d", $this->start, $this->end);
+    }
+}
+
+
