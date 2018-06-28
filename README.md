@@ -25,3 +25,17 @@ Once installed you can run the application by typing:
 
 within the application direcctory.
 
+## Usage:
+
+The basic usage of the application is governed by command line switches.
+
+|  Switch | Function   |  Optional  |
+|---|---|---|
+| -u | URL  | False  |
+|  -c | How big you want each chunk to be    | True   |
+| -s  | How big you want each segment to be  | True   |
+| -o  | The output filename defaults to "output.file"  | True |
+
+**NOTE:** There are no spaces in between arguments.
+
+So instead of `php main.php -o filename` it would be `php main.php -ofilename`
