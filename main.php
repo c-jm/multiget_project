@@ -19,19 +19,19 @@ class ArgParser
             usage();
         }
 
-        foreach($options as $v) {
-            if (! $v)
+        foreach ($options as $v) {
+            if (! $v) {
                 usage();
+            }
         }
 
 
-        return ['url' => $options['u'], 
+        return ['url' => $options['u'],
             'outputFilename' => isset($options['o']) ? $options['o'] : 'output.file',
             'segmentSize' => isset($options['s']) ? $options['s'] : 4,
             'chunkSize' => isset($options['c']) ? $options['c'] : 1];
     }
-
-} 
+}
 function main()
 {
     $options = ArgParser::validateArgs();

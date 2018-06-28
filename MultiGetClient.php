@@ -59,13 +59,13 @@ class MultiGetClient
             // We send a range request with the current segment.
             $response = $this->sendRangeRequest($chunk);
 
-            // Process the current chunk updating the number of bytes we have processed and adding the chunk to currentChunks.  
+            // Process the current chunk updating the number of bytes we have processed and adding the chunk to currentChunks.
             $this->processChunk($chunk);
 
             callCallback($this->perChunkCallback, $response);
         }
 
-        // We then setup some stats and call a finish callback whiich allows the user to do what they want when finished. 
+        // We then setup some stats and call a finish callback whiich allows the user to do what they want when finished.
         // In our case we are just printing hte stats that were passed in.
         callCallback($this->finishedCallback, $this->buildStats());
     }

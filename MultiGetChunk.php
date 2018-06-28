@@ -16,5 +16,3 @@ class MultiGetChunk
         return sprintf("bytes=%d-%d", $this->start, $this->end);
     }
 }
-
-
