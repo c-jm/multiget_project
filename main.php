@@ -13,6 +13,9 @@ function main()
         file_put_contents("test.jar", $content, FILE_APPEND);
     });
 
+    $client->setFinishedCallback(function($stats) {
+        dd($stats);
+    });
 
     $client->fetch();
 
