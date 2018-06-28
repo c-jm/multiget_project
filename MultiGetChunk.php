@@ -1,5 +1,12 @@
 <?php
 
+// Class Name: MultiGetChunk
+//
+// A MultiGetChunk represents a single range request within
+// the context of a file download. Since its a basic value object
+// all properties are public.
+
+
 class MultiGetChunk
 {
     public $start; // The starting chunk of this segment.
