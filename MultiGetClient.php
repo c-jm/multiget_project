@@ -10,6 +10,7 @@ class MultiGetClient
 {
     private $url;           // The URL we are downloading from.
     private $guzzleClient;  // The client we are using.
+    private $perSegmentCallback; // A callback we want to call for every segment.
 
     // Specials
     //
@@ -19,23 +20,28 @@ class MultiGetClient
         $this->guzzleClient = new GuzzleClient();
     }
 
+    public function setPerSegmentCallback($cb) {
+        $this->perSegmentCallback = $cb;
+    }
+
     public function fetch()
     {
-        $totalSize = MB::allocateUnits(4)->numberOfBytes();
-        $chunkSegmentSize = MB::allocateUnits(1)->numberOfBytes();
+        $segmentSize = MB::allocateUnits(4)->numberOfBytes();
+        $chunkSize = MB::allocateUnits(1)->numberOfBytes();
         $currentlyProcessed = 0;
 
-        while ($currentlyProcessed < $totalSize) {
+        while ($currentlyProcessed < $segmentSize) {
             $segmentStart = $currentlyProcessed;
-            $segmentEnd   = ($currentlyProcessed + $chunkSegmentSize);
+            $segmentEnd   = ($currentlyProcessed + $chunkSize);
 
             $rangeHeaderString = $this->buildRangeString($segmentStart, $segmentEnd);
             $req = new GuzzleRequest('GET', $this->url, ['Range' => $rangeHeaderString]);
             $response = $this->guzzleClient->send($req);
 
-            var_dump($response->getStatusCode());
+            $currentlyProcessed += $chunkSize;
 
-            $currentlyProcessed += $chunkSegmentSize;
+            $perSegCallback = $this->perSegmentCallback;
+            $perSegCallback($response);
         }
     }
 
