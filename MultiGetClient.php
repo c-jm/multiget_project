@@ -10,7 +10,6 @@ class MultiGetClient
 {
     private $url;           // The URL we are downloading from.
     private $guzzleClient;  // The client we are using.
-    private $currentRequest; // The current request we are processing.
 
     // Specials
     //
@@ -22,5 +21,24 @@ class MultiGetClient
 
     public function fetch()
     {
+        $chunkSegmentSize = MB::allocateUnits(1)->numberOfBytes();
+
+        $rangeHeaderString = $this->buildRangeString(0, $chunkSegmentSize);
+
+        $req = new GuzzleRequest('GET', $this->url, ['Range' => $rangeHeaderString]);
+        $response = $this->guzzleClient->send($req);
+
+        dd($response);
     }
+
+    private function buildRangeString($start, $end)
+    {
+        return sprintf("bytes=%d-%d", $start, $end);
+    }
+}
+
+function dd($value)
+{
+    var_dump($value);
+    die();
 }
