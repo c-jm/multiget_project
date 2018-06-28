@@ -21,14 +21,22 @@ class MultiGetClient
 
     public function fetch()
     {
+        $totalSize = MB::allocateUnits(4)->numberOfBytes();
         $chunkSegmentSize = MB::allocateUnits(1)->numberOfBytes();
+        $currentlyProcessed = 0;
 
-        $rangeHeaderString = $this->buildRangeString(0, $chunkSegmentSize);
+        while ($currentlyProcessed < $totalSize) {
+            $segmentStart = $currentlyProcessed;
+            $segmentEnd   = ($currentlyProcessed + $chunkSegmentSize);
 
-        $req = new GuzzleRequest('GET', $this->url, ['Range' => $rangeHeaderString]);
-        $response = $this->guzzleClient->send($req);
+            $rangeHeaderString = $this->buildRangeString($segmentStart, $segmentEnd);
+            $req = new GuzzleRequest('GET', $this->url, ['Range' => $rangeHeaderString]);
+            $response = $this->guzzleClient->send($req);
 
-        dd($response);
+            var_dump($response->getStatusCode());
+
+            $currentlyProcessed += $chunkSegmentSize;
+        }
     }
 
     private function buildRangeString($start, $end)
