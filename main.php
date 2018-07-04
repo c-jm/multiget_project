@@ -18,20 +18,17 @@ function main()
     // Create a new client and set call backs appropriately.
     $client = new MultiGetClient($options['url'], $segmentSize, $chunkSize);
 
+    printf("Downloading first %d chunks from url %s to file: %s", $options['segmentSize'], $options['url'], $options['outputFilename']);
+    printf("\n");
+
     $client->setPerChunkCallback(function ($response) use ($options) {
+        printf('.');
         $content = $response->getBody();
         file_put_contents($options['outputFilename'], $content, FILE_APPEND);
     });
 
     $client->setFinishedCallback(function ($stats) {
-        printf("=========\n");
-        printf("Bytes Processed: %d\n # of Get Requests: %d\n", $stats['bytes_processed'], $stats['number_of_get_requests']);
-        printf("=========\n");
-
-        foreach ($stats['chunks'] as $chunkIndex => $chunk) {
-            printf(" Chunk: %d\n Start: %d\n End: %d\n", ($chunkIndex + 1), $chunk->start, $chunk->end);
-            printf("=========\n");
-        }
+        printf("done\n");
     });
 
     // Finally fetch the resource by and watch it happen.
